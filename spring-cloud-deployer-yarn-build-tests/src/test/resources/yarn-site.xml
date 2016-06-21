@@ -4,10 +4,14 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-   <property>
-        <name>yarn.nodemanager.sleep-delay-before-sigkill.ms</name>
-        <value>10000</value>
-   </property>
+	 <property>
+				<name>yarn.nodemanager.sleep-delay-before-sigkill.ms</name>
+				<value>10000</value>
+	 </property>
+	 <property>
+				<name>yarn.nodemanager.delete.debug-delay-sec</name>
+				<value>600</value>
+	 </property>
 
 </configuration>
 

@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.deployer.spi.app.AppDeployer;
 import org.springframework.cloud.deployer.spi.app.AppInstanceStatus;
 import org.springframework.cloud.deployer.spi.app.AppStatus;
@@ -64,6 +65,9 @@ public class YarnAppDeployer implements AppDeployer {
 	private final YarnCloudAppService yarnCloudAppService;
 	private final StateMachine<String, String> stateMachine;
 
+	@Autowired
+	private YarnDeployerProperties yarnDeployerProperties;
+
 	/**
 	 * Instantiates a new yarn stream module deployer.
 	 *
@@ -100,14 +104,20 @@ public class YarnAppDeployer implements AppDeployer {
 
 		// deployment properties override servers.yml which overrides application.yml
 		for (Entry<String, String> entry : environmentProperties.entrySet()) {
-			if (entry.getKey().startsWith("dataflow.yarn.app.streamappmaster")) {
+			if (entry.getKey().startsWith("deployer.yarn.app.streamappmaster")) {
 				contextRunArgs.add("--" + entry.getKey() + "=" + entry.getValue());
-			} else if (entry.getKey().startsWith("dataflow.yarn.app.streamcontainer")) {
+			} else if (entry.getKey().startsWith("deployer.yarn.app.streamcontainer")) {
 				// weird format with '--' is just straight pass to appmaster
 				contextRunArgs.add("--spring.yarn.client.launchcontext.arguments.--" + entry.getKey() + "=" + entry.getValue());
 			}
 		}
-		String artifactPath = isHdfsResource(resource) ? getHdfsArtifactPath(resource) : "/dataflow/artifacts/cache/";
+
+		String baseDir = yarnDeployerProperties.getBaseDir();
+		if (!baseDir.endsWith("/")) {
+			baseDir = baseDir + "/";
+		}
+
+		String artifactPath = isHdfsResource(resource) ? getHdfsArtifactPath(resource) : baseDir + "/artifacts/cache/";
 		contextRunArgs.add("--spring.yarn.client.launchcontext.arguments.--spring.cloud.deployer.yarn.appmaster.artifact=" + artifactPath);
 
 		// TODO: using default app name "app" until we start to customise

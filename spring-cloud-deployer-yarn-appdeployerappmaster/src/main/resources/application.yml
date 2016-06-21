@@ -1,6 +1,3 @@
-logging:
-  level:
-    org.springframework.yarn: DEBUG
 server:
   port: 0
 endpoints:
@@ -15,9 +12,9 @@ spring:
         version: "@project.version@"
   yarn:
     appName: spring-cloud-dataflow-yarn-app
-    applicationBaseDir: /dataflow/apps/stream/
+    applicationBaseDir: ${deployer.yarn.app.baseDir:/dataflow}/apps/stream/
     appmaster:
-      appmasterClass: org.springframework.cloud.dataflow.yarn.appdeployer.StreamAppmaster
+      appmasterClass: org.springframework.cloud.deployer.spi.yarn.appdeployer.StreamAppmaster
       keepContextAlive: true
       localizer:
         patterns:
@@ -27,13 +24,13 @@ spring:
         clusters:
           module-template:
             resource:
-              priority: ${dataflow.yarn.app.streamcontainer.priority:5}
-              memory: ${dataflow.yarn.app.streamcontainer.memory:256m}
-              virtualCores: ${dataflow.yarn.app.streamcontainer.virtualCores:1}
-              labelExpression: ${dataflow.yarn.app.streamcontainer.labelExpression:}
+              priority: ${deployer.yarn.app.streamcontainer.priority:5}
+              memory: ${deployer.yarn.app.streamcontainer.memory:256m}
+              virtualCores: ${deployer.yarn.app.streamcontainer.virtualCores:1}
+              labelExpression: ${deployer.yarn.app.streamcontainer.labelExpression:}
             launchcontext:
               options:
-                - ${dataflow.yarn.app.streamcontainer.javaOpts:}
+                - ${deployer.yarn.app.streamcontainer.javaOpts:}
               arguments:
                 -Dserver.port: 0
                 -Dendpoints.jmx.unique-names: true

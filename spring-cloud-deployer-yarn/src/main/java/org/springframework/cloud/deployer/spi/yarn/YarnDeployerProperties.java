@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package org.springframework.cloud.dataflow.yarn.appdeployer;
+package org.springframework.cloud.deployer.spi.yarn;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Configuration properties passed from a deployer into an appmaster.
- *
- * @author Janne Valkealahti
- */
-@ConfigurationProperties(value = "spring.cloud.deployer.yarn.appmaster")
-public class StreamAppmasterProperties {
+@ConfigurationProperties(value = "deployer.yarn.app")
+public class YarnDeployerProperties {
 
-	private String artifact;
+	private String baseDir = "/dataflow";
 
-	public String getArtifact() {
-		return artifact;
+	public String getBaseDir() {
+		return baseDir;
 	}
 
-	public void setArtifact(String artifact) {
-		this.artifact = artifact;
+	public void setBaseDir(String baseDir) {
+		this.baseDir = baseDir;
 	}
 }

@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.deployer.spi.core.AppDefinition;
 import org.springframework.cloud.deployer.spi.core.AppDeploymentRequest;
 import org.springframework.cloud.deployer.spi.task.LaunchState;
@@ -57,6 +58,9 @@ public class YarnTaskLauncher implements TaskLauncher {
 	private static final Logger logger = LoggerFactory.getLogger(YarnTaskLauncher.class);
 	private final YarnCloudAppService yarnCloudAppService;
 	private final StateMachine<String, String> stateMachine;
+
+	@Autowired
+	private YarnDeployerProperties yarnDeployerProperties;
 
 	/**
 	 * Instantiates a new yarn task module deployer.
@@ -102,16 +106,20 @@ public class YarnTaskLauncher implements TaskLauncher {
 			index++;
 		}
 
-		String artifactPath = isHdfsResource(resource) ? getHdfsArtifactPath(resource) : "/dataflow/artifacts/cache/";
+		String baseDir = yarnDeployerProperties.getBaseDir();
+		if (!baseDir.endsWith("/")) {
+			baseDir = baseDir + "/";
+		}
+		String artifactPath = isHdfsResource(resource) ? getHdfsArtifactPath(resource) : baseDir + "/artifacts/cache/";
 
 		contextRunArgs.add("--spring.yarn.client.launchcontext.arguments.--spring.yarn.appmaster.launchcontext.archiveFile=" + artifact);
 		contextRunArgs.add("--spring.yarn.client.launchcontext.arguments.--spring.cloud.deployer.yarn.appmaster.artifact=" + artifactPath + artifact);
 
 		// deployment properties override servers.yml which overrides application.yml
 		for (Entry<String, String> entry : environmentProperties.entrySet()) {
-			if (entry.getKey().startsWith("dataflow.yarn.app.taskcontainer")) {
+			if (entry.getKey().startsWith("deployer.yarn.app.taskcontainer")) {
 				contextRunArgs.add("--spring.yarn.client.launchcontext.arguments.--" + entry.getKey() + "=" + entry.getValue());
-			} else if (entry.getKey().startsWith("dataflow.yarn.app.taskappmaster")) {
+			} else if (entry.getKey().startsWith("deployer.yarn.app.taskappmaster")) {
 				contextRunArgs.add("--" + entry.getKey() + "=" + entry.getValue());
 			}
 		}

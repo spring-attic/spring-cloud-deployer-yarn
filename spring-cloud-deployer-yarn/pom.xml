@@ -47,4 +47,18 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>task.yml</include>
+					<include>stream.yml</include>
+					<include>appdeployer-model.uml</include>
+					<include>tasklauncher-model.uml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 </project>

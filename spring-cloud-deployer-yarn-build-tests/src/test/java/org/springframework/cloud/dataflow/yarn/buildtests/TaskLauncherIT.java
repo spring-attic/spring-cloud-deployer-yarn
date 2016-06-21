@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenProperties;
 import org.springframework.cloud.deployer.resource.maven.MavenResource;
 import org.springframework.cloud.deployer.spi.core.AppDefinition;
@@ -51,6 +52,7 @@ import org.springframework.cloud.deployer.spi.task.TaskLauncher;
 import org.springframework.cloud.deployer.spi.yarn.DefaultYarnCloudAppService;
 import org.springframework.cloud.deployer.spi.yarn.TaskLauncherStateMachine;
 import org.springframework.cloud.deployer.spi.yarn.YarnCloudAppService;
+import org.springframework.cloud.deployer.spi.yarn.YarnDeployerProperties;
 import org.springframework.cloud.deployer.spi.yarn.YarnCloudAppService.CloudAppInstanceInfo;
 import org.springframework.cloud.deployer.spi.yarn.YarnCloudAppService.CloudAppType;
 import org.springframework.cloud.deployer.spi.yarn.YarnTaskLauncher;
@@ -331,6 +333,7 @@ public class TaskLauncherIT extends AbstractCliBootYarnClusterTests {
 	}
 
 	@Configuration
+	@EnableConfigurationProperties({ YarnDeployerProperties.class })
 	public static class TestYarnConfiguration {
 
 		@Autowired
@@ -363,7 +366,17 @@ public class TaskLauncherIT extends AbstractCliBootYarnClusterTests {
 			ApplicationContextInitializer<?>[] initializers = new ApplicationContextInitializer<?>[] {
 					new HadoopConfigurationInjectingInitializer(configuration) };
 			String dataflowVersion = environment.getProperty("projectVersion");
-			return new DefaultYarnCloudAppService(dataflowVersion, initializers);
+			return new DefaultYarnCloudAppService(dataflowVersion, initializers) {
+				@Override
+				protected List<String> processContextRunArgs(List<String> contextRunArgs) {
+					List<String> newArgs = new ArrayList<>();
+					if (contextRunArgs != null) {
+						newArgs.addAll(contextRunArgs);
+					}
+					newArgs.add("--deployer.yarn.app.appmaster.path=target/spring-cloud-deployer-yarn-build-tests");
+					return newArgs;
+				}
+			};
 		}
 	}
 }

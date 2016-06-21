@@ -1,6 +1,3 @@
-logging:
-  level:
-    org.springframework.yarn: DEBUG
 server:
   port: 0
 endpoints:
@@ -14,7 +11,7 @@ spring:
       yarn:
         version: "@project.version@"
   yarn:
-    applicationBaseDir: /dataflow/apps/task/
+    applicationBaseDir: ${deployer.yarn.app.baseDir:/dataflow}/apps/task/
     appmaster:
       containerCount: 1
       appmasterClass: org.springframework.cloud.deployer.spi.yarn.tasklauncher.TaskAppmaster
@@ -22,13 +19,13 @@ spring:
         patterns:
           - "servers.yml"
       resource:
-        priority: ${dataflow.yarn.app.taskcontainer.priority:10}
-        labelExpression: ${dataflow.yarn.app.taskcontainer.labelExpression:}
-        memory: ${dataflow.yarn.app.taskcontainer.memory:256m}
-        virtualCores: ${dataflow.yarn.app.taskcontainer.virtualCores:1}
+        priority: ${deployer.yarn.app.taskcontainer.priority:10}
+        labelExpression: ${deployer.yarn.app.taskcontainer.labelExpression:}
+        memory: ${deployer.yarn.app.taskcontainer.memory:256m}
+        virtualCores: ${deployer.yarn.app.taskcontainer.virtualCores:1}
       launchcontext:
         options:
-          - ${dataflow.yarn.app.taskcontainer.javaOpts:}
+          - ${deployer.yarn.app.taskcontainer.javaOpts:}
         arguments:
           -Dserver.port: 0
           -Dspring.jmx.enabled: false              

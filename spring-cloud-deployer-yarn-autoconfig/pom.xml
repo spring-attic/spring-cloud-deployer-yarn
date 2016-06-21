@@ -2,15 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>spring-cloud-starter-deployer-yarn</artifactId>
+	<artifactId>spring-cloud-deployer-yarn-autoconfig</artifactId>
 	<version>1.0.0.BUILD-SNAPSHOT</version>
-	<name>spring-cloud-starter-deployer-yarn</name>
-	<description>Data Flow Deployer Starter for Apache Yarn</description>
-	<url>http://projects.spring.io/spring-cloud/</url>
-	<organization>
-		<name>Pivotal Software, Inc.</name>
-		<url>http://www.spring.io</url>
-	</organization>
+	<packaging>jar</packaging>
+	<name>spring-cloud-deployer-yarn-autoconfig</name>
+	<description>Data Flow Deployer Autoconfig for Apache Yarn</description>
 
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
@@ -21,8 +17,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-deployer-yarn-autoconfig</artifactId>
-			<version>1.0.0.BUILD-SNAPSHOT</version>
+			<artifactId>spring-cloud-deployer-yarn</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
