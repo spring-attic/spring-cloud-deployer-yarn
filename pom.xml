@@ -16,7 +16,6 @@
 
 	<properties>
 		<spring-cloud-deployer.version>1.0.0.RC1</spring-cloud-deployer.version>
-		<spring-cloud-stream.version>1.0.0.RC3</spring-cloud-stream.version>
 		<spring-hadoop.version>2.4.0.BUILD-SNAPSHOT</spring-hadoop.version>
 		<spring-statemachine.version>1.1.0.RELEASE</spring-statemachine.version>
 	</properties>
