@@ -89,7 +89,7 @@ public class AbstractStateMachineTests {
 			ArrayList<CloudAppInstanceInfo> infos = new ArrayList<CloudAppInstanceInfo>();
 			if (instance != null) {
 				if (getInstancesCount >= getInstancesCountBeforeReturn) {
-					infos.add(new CloudAppInstanceInfo("fakeApplicationId", instance, "RUNNING", "http://fakeAddress"));
+					infos.add(new CloudAppInstanceInfo("fakeApplicationId", instance, "RUNNING", "https://fakeAddress"));
 				}
 			}
 			getInstancesCount++;
