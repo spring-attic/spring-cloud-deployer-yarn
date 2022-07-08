@@ -1,3 +1,5 @@
+# spring-cloud-deployer-yarn is no longer actively maintained by VMware, Inc.
+
 == Spring Cloud Deployer for Apache Yarn
 
 
